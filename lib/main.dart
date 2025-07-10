@@ -15,6 +15,10 @@ import 'features/home/home_page.dart';
 import 'features/profile/profile_controller.dart';
 import 'features/profile/profile_page.dart';
 
+// Favorites
+import 'features/favorites/favorites_controller.dart';
+import 'features/favorites/favorites_page.dart';
+
 void main() {
   runApp(
     MultiProvider(
@@ -23,6 +27,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => LoginController()),
         ChangeNotifierProvider(create: (_) => HomeController()),
         ChangeNotifierProvider(create: (_) => ProfileController()),
+        ChangeNotifierProvider(create: (_) => FavoritesController()),
 
       ],
       child: const MyApp(),
@@ -42,12 +47,13 @@ class MyApp extends StatelessWidget {
       ),
 
       home: const RegisterPage(),
-      initialRoute: '/profile',
+      initialRoute: '/favorites',
       routes: {
         '/register': (context) => const RegisterPage(),
         '/login': (context) => const LoginPage(),
         '/home': (context) => const HomePage(),
         '/profile': (context) => const ProfilePage(),
+        '/favorites': (context) => const FavoritesPage(),
       }
     );
   }
