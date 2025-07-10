@@ -7,6 +7,10 @@ import 'features/auth/register/register_page.dart';
 import 'features/auth/login/login_controller.dart';
 import 'features/auth/login/login_page.dart';
 
+// Home
+import 'features/home/home_controller.dart';
+import 'features/home/home_page.dart';
+
 
 void main() {
   runApp(
@@ -14,6 +18,8 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => RegisterController()),
         ChangeNotifierProvider(create: (_) => LoginController()),
+        ChangeNotifierProvider(create: (_) => HomeController()),
+
       ],
       child: const MyApp(),
     ),
@@ -32,10 +38,11 @@ class MyApp extends StatelessWidget {
       ),
 
       home: const RegisterPage(),
-      initialRoute: '/register',
+      initialRoute: '/home',
       routes: {
         '/register': (context) => const RegisterPage(),
         '/login': (context) => const LoginPage(),
+        '/home': (context) => const HomePage(),
       }
     );
   }
