@@ -11,6 +11,9 @@ import 'features/auth/login/login_page.dart';
 import 'features/home/home_controller.dart';
 import 'features/home/home_page.dart';
 
+// Profile
+import 'features/profile/profile_controller.dart';
+import 'features/profile/profile_page.dart';
 
 void main() {
   runApp(
@@ -19,6 +22,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => RegisterController()),
         ChangeNotifierProvider(create: (_) => LoginController()),
         ChangeNotifierProvider(create: (_) => HomeController()),
+        ChangeNotifierProvider(create: (_) => ProfileController()),
 
       ],
       child: const MyApp(),
@@ -38,11 +42,12 @@ class MyApp extends StatelessWidget {
       ),
 
       home: const RegisterPage(),
-      initialRoute: '/home',
+      initialRoute: '/profile',
       routes: {
         '/register': (context) => const RegisterPage(),
         '/login': (context) => const LoginPage(),
         '/home': (context) => const HomePage(),
+        '/profile': (context) => const ProfilePage(),
       }
     );
   }
