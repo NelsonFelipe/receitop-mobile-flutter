@@ -7,8 +7,10 @@ environment:
   sdk: ">=3.8.1 <4.0.0"
 
 dependencies:
+  http: ^1.4.0
   flutter:
     sdk: flutter
+    
 
   # Modern UI
   google_fonts: ^6.2.1      # ajustado para versão compatível
