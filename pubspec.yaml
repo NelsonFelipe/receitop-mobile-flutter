@@ -8,10 +8,10 @@ environment:
 
 dependencies:
   http: ^1.4.0
+  image_picker: ^0.8.7+3
   flutter:
     sdk: flutter
-    
-
+  
   # Modern UI
   google_fonts: ^6.2.1      # ajustado para versão compatível
   flutter_svg: ^2.0.0

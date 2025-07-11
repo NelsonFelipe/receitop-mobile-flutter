@@ -10,6 +10,10 @@ import 'features/auth/register/register_page.dart';
 import 'features/auth/login/login_controller.dart';
 import 'features/auth/login/login_page.dart';
 
+// Recipes 
+import 'features/recipes/create/recipe_create_controller.dart';
+import 'features/recipes/create/recipe_create_page.dart';
+
 // Outros Controllers (usados dentro do AppShell)
 import 'features/home/home_controller.dart';
 import 'features/profile/profile_controller.dart';
@@ -24,6 +28,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => HomeController()),
         ChangeNotifierProvider(create: (_) => ProfileController()),
         ChangeNotifierProvider(create: (_) => FavoritesController()),
+        ChangeNotifierProvider(create: (_) => RecipeCreateController()),
       ],
       child: const MyApp(),
     ),
@@ -49,6 +54,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const RegisterPage(),
         '/login': (context)    => const LoginPage(),
         '/app': (context)      => const AppShell(),
+        '/create': (context) => const RecipeCreatePage(),
       },
     );
   }
