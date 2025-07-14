@@ -42,4 +42,11 @@ class FavoritesController extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  /// Remove uma imagem dos favoritos e atualiza a UI
+  Future<void> removeFavorite(CatImage fav) async {
+    // Remove usando igualdade de instância ou URL como identificador
+    _favorites.removeWhere((f) => f.url == fav.url);
+    notifyListeners();
+  }
 }

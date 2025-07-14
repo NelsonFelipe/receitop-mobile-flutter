@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../recipes/details/recipe_details_page.dart'; // importa a página de detalhes
 import 'favorites_controller.dart';
 import '../home/widgets/category_card.dart';
 
@@ -13,7 +14,6 @@ class FavoritesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ctrl = context.watch<FavoritesController>();
 
-    // dispara a carga na primeira construção
     if (!ctrl.isLoading && ctrl.favorites.isEmpty && ctrl.error == null) {
       context.read<FavoritesController>().loadFavorites();
     }
@@ -23,7 +23,7 @@ class FavoritesPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // ─── Search bar ───────────────────────────────
+            // Search bar
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
               child: TextField(
@@ -39,15 +39,13 @@ class FavoritesPage extends StatelessWidget {
                     borderSide: BorderSide.none,
                   ),
                 ),
-                onChanged: (term) {
-                  // opcional: filtrar a lista via controller
-                },
+                onChanged: (term) {},
               ),
             ),
 
             const SizedBox(height: 8),
 
-            // ─── Grid de favoritos ───────────────────────
+            // Grid de favoritos
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -67,8 +65,6 @@ class FavoritesPage extends StatelessWidget {
                             ),
                             itemBuilder: (context, i) {
                               final fav = ctrl.favorites[i];
-
-                              // Usa títulos do controller ou placeholder
                               final title = (i < ctrl.titles.length)
                                   ? ctrl.titles[i]
                                   : 'Receita ${i + 1}';
@@ -76,6 +72,25 @@ class FavoritesPage extends StatelessWidget {
                               return CategoryCard(
                                 title: title,
                                 imageUrl: fav.url,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => RecipeDetailsPage(
+                                        title: title,
+                                        imageUrl: fav.url,
+                                        isFavoritePage: true,
+                                        onFavoriteToggle: () {
+                                          // remove dos favoritos
+                                          context
+                                              .read<FavoritesController>()
+                                              .removeFavorite(fav);
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                },
                               );
                             },
                           ),
