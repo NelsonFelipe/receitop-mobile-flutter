@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 class CategoryCard extends StatelessWidget {
   final String title;
   final String imageUrl;
+  final VoidCallback? onTap;  // Callback opcional para tratar o toque
 
   const CategoryCard({
     Key? key,
     required this.title,
     required this.imageUrl,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -18,8 +20,7 @@ class CategoryCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: () {
-        },
+        onTap: onTap,  // Dispara a ação passada de fora
         child: Stack(
           children: [
             // imagem
