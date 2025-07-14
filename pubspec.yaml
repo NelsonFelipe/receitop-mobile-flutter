@@ -7,8 +7,10 @@ environment:
   sdk: ">=3.8.1 <4.0.0"
 
 dependencies:
+  dio: ^5.1.2 
   http: ^1.4.0
   image_picker: ^0.8.7+3
+  flutter_dotenv: ^5.0.2
   flutter:
     sdk: flutter
   
