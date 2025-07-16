@@ -12,7 +12,7 @@ class UserDTO {
     id: json['id'] as String?,
     name: json['name'],
     email: json['email'],
-    password: '',               // nunca exponha a senha na resposta!
+    password: '',           
     token: json['token'] as String?,
   );
 
