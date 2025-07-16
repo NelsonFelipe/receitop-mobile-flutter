@@ -91,23 +91,18 @@ class LoginPage extends StatelessWidget {
                         _ModernButton(
                           label: 'Entrar',
                           enabled: ctrl.canSubmit,
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (_) => AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                title: const Text('Bem-vindo!'),
-                                content: Text('Você entrou como ${ctrl.email}'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('OK'),
-                                  )
-                                ],
-                              ),
-                            );
+                          onPressed: () async {
+                            final success = await ctrl.login();
+                            if (success) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Login bem-sucedido!')),
+                              );
+                              Navigator.pushReplacementNamed(context, '/app');
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Email ou senha inválidos.')),
+                              );
+                            }
                           },
                         ),
                         

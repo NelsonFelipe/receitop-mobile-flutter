@@ -61,6 +61,7 @@ class RegisterController extends ChangeNotifier {
 
     try {
       final success = await authService.register(user);
+      print('🟢 Resposta da api: ${success}');
       if (!success) {
         errorMessage = 'Falha ao registrar. Tente novamente.';
       }

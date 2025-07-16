@@ -87,18 +87,6 @@ class ProfilePage extends StatelessWidget {
             child: ListView(
               children: [
                 ListTile(
-                  leading: const Icon(Icons.edit),
-                  title: Text('Editar Perfil', style: GoogleFonts.inter()),
-                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                  onTap: () {/* TODO */},
-                ),
-                ListTile(
-                  leading: const Icon(Icons.settings),
-                  title: Text('Configurações', style: GoogleFonts.inter()),
-                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                  onTap: () {/* TODO */},
-                ),
-                ListTile(
                   leading: const Icon(Icons.logout),
                   title: Text('Sair', style: GoogleFonts.inter()),
                   onTap: () {/* TODO */},

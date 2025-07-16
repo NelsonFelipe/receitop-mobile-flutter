@@ -26,7 +26,7 @@ import 'features/favorites/favorites_controller.dart';
       MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => RegisterController(authService: AuthService(baseUrl: baseUrl))),
-          ChangeNotifierProvider(create: (_) => LoginController()),
+          ChangeNotifierProvider(create: (_) => LoginController(authService: AuthService(baseUrl: baseUrl))),
           ChangeNotifierProvider(create: (_) => HomeController()),
           ChangeNotifierProvider(create: (_) => ProfileController()),
           ChangeNotifierProvider(create: (_) => FavoritesController()),
@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
       ),
 
       // Tela inicial: registro
-      initialRoute: '/register', 
+      initialRoute: '/login', 
       routes: {
         '/register': (context) => const RegisterPage(),
         '/login': (context)    => const LoginPage(),
