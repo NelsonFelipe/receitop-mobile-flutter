@@ -62,14 +62,26 @@ class RecipeCreatePage extends StatelessWidget {
             const SizedBox(height: 32),
 
             ElevatedButton(
-              onPressed: ctrl.canSubmit ? () {
-                // TODO: salvar receita
+              onPressed: ctrl.canSubmit ? () async {
+                try {
+                  await ctrl.saveRecipe();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Receita criada com sucesso!')),
+                  );
+                  Navigator.pushReplacementNamed(context, '/app'); // Redireciona para a tela principal
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Erro ao criar receita: ${e.toString()}')),
+                  );
+                }
               } : null,
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
-              child: Text('Salvar', style: GoogleFonts.inter(fontSize: 16)),
+              child: ctrl.isLoading
+                  ? const CircularProgressIndicator(color: Colors.white)
+                  : Text('Salvar', style: GoogleFonts.inter(fontSize: 16)),
             ),
           ],
         ),

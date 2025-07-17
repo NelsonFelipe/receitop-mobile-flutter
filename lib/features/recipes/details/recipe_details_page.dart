@@ -1,8 +1,10 @@
-// lib/features/recipes/details/recipe_details_page.dart
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'recipe_details_controller.dart';
 
-class RecipeDetailsPage extends StatelessWidget {
+class RecipeDetailsPage extends StatefulWidget {
+  final String recipeId;
   final String title;
   final String imageUrl;
   final bool isFavoritePage;
@@ -10,6 +12,7 @@ class RecipeDetailsPage extends StatelessWidget {
 
   const RecipeDetailsPage({
     Key? key,
+    required this.recipeId,
     required this.title,
     required this.imageUrl,
     this.isFavoritePage = false,
@@ -17,113 +20,153 @@ class RecipeDetailsPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _RecipeDetailsPageState createState() => _RecipeDetailsPageState();
+}
+
+class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<RecipeDetailsController>().fetchRecipeDetails(widget.recipeId);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    const description =
-        'Uma deliciosa receita de exemplo, perfeita para inspirar o seu próximo jantar!';
-    const ingredients = [
-      '1 xícara de ingrediente A',
-      '2 colheres de sopa de ingrediente B',
-      'Sal a gosto',
-      'Pitada de especiarias'
-    ];
-    const steps = [
-      'Misturar ingredientes secos.',
-      'Adicionar líquidos e mexer.',
-      'Cozinhar em fogo médio por 15 minutos.',
-      'Servir quente.'
-    ];
+    final ctrl = context.watch<RecipeDetailsController>();
 
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            expandedHeight: 280,
-            pinned: true,
-            backgroundColor: Colors.white,
-            flexibleSpace: FlexibleSpaceBar(
-              titlePadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              title: Text(
-                title,
-                style: GoogleFonts.inter(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  shadows: [Shadow(color: Colors.black45, blurRadius: 2)],
-                ),
-              ),
-              background: Image.network(imageUrl, fit: BoxFit.cover),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Descrição',
-                      style: GoogleFonts.inter(
-                          fontSize: 16, fontWeight: FontWeight.w600)),
-                  const SizedBox(height: 8),
-                  Text(description,
-                      style: GoogleFonts.inter(fontSize: 14, height: 1.4)),
-                  const SizedBox(height: 24),
-                  Text('Ingredientes',
-                      style: GoogleFonts.inter(
-                          fontSize: 16, fontWeight: FontWeight.w600)),
-                  const SizedBox(height: 8),
-                  ...ingredients.map((ing) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Row(
+      body: ctrl.isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : ctrl.error != null
+              ? Center(child: Text(ctrl.error!))
+              : CustomScrollView(
+                  slivers: [
+                    SliverAppBar(
+                      expandedHeight: 280,
+                      pinned: true,
+                      backgroundColor: Colors.white,
+                      leading: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white.withOpacity(0.7),
+                          child: IconButton(
+                            icon: const Icon(Icons.arrow_back, color: Colors.black),
+                            onPressed: () => Navigator.of(context).pop(),
+                          ),
+                        ),
+                      ),
+                      flexibleSpace: FlexibleSpaceBar(
+                        titlePadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        title: Text(
+                          widget.title,
+                          style: GoogleFonts.inter(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            shadows: [Shadow(color: Colors.black45, blurRadius: 2)],
+                          ),
+                        ),
+                        background: Stack(
+                          fit: StackFit.expand,
                           children: [
-                            const Icon(Icons.check_circle_outline,
-                                size: 20, color: Colors.green),
-                            const SizedBox(width: 8),
-                            Expanded(
-                                child: Text(ing, style: GoogleFonts.inter())),
+                            Image.network(widget.imageUrl, fit: BoxFit.cover),
+                            Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Colors.transparent,
+                                    Colors.black.withOpacity(0.7),
+                                  ],
+                                  stops: const [0.5, 1.0],
+                                ),
+                              ),
+                            ),
                           ],
                         ),
-                      )),
-                  const SizedBox(height: 24),
-                  Text('Modo de Preparo',
-                      style: GoogleFonts.inter(
-                          fontSize: 16, fontWeight: FontWeight.w600)),
-                  const SizedBox(height: 8),
-                  ...List.generate(steps.length, (i) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 6),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CircleAvatar(
-                            radius: 10,
-                            backgroundColor: Colors.green,
-                            child: Text(
-                              '${i + 1}',
-                              style: GoogleFonts.inter(
-                                  fontSize: 12, color: Colors.white),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                              child: Text(steps[i], style: GoogleFonts.inter())),
-                        ],
                       ),
-                    );
-                  }),
-                  const SizedBox(height: 32),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Descrição',
+                                style: GoogleFonts.inter(
+                                    fontSize: 16, fontWeight: FontWeight.w600)),
+                            const SizedBox(height: 8),
+                            Text(ctrl.recipe?.description ?? 'N/A',
+                                style: GoogleFonts.inter(
+                                    fontSize: 14, height: 1.4)),
+                            const SizedBox(height: 24),
+                            Text('Ingredientes',
+                                style: GoogleFonts.inter(
+                                    fontSize: 16, fontWeight: FontWeight.w600)),
+                            const SizedBox(height: 8),
+                            if (ctrl.recipe?.ingredients != null)
+                              ...ctrl.recipe!.ingredients.map((ing) => Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 4),
+                                    child: Row(
+                                      children: [
+                                        const Icon(Icons.check_circle_outline,
+                                            size: 20, color: Colors.green),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                            child: Text(ing,
+                                                style: GoogleFonts.inter())),
+                                      ],
+                                    ),
+                                  )),
+                            const SizedBox(height: 24),
+                            Text('Modo de Preparo',
+                                style: GoogleFonts.inter(
+                                    fontSize: 16, fontWeight: FontWeight.w600)),
+                            const SizedBox(height: 8),
+                            if (ctrl.recipe?.steps != null)
+                              ...List.generate(ctrl.recipe!.steps.length, (i) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 6),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 10,
+                                        backgroundColor: Colors.green,
+                                        child: Text(
+                                          '${i + 1}',
+                                          style: GoogleFonts.inter(
+                                              fontSize: 12,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                          child: Text(ctrl.recipe!.steps[i],
+                                              style: GoogleFonts.inter())),
+                                    ],
+                                  ),
+                                );
+                              }),
+                            const SizedBox(height: 32),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
       floatingActionButton: FloatingActionButton(
-        onPressed: onFavoriteToggle,
-        backgroundColor:
-            isFavoritePage ? Colors.grey.shade300 : Colors.redAccent,
+        onPressed: () => ctrl.toggleFavorite(widget.recipeId),
+        backgroundColor: Colors.redAccent,
         child: Icon(
-          isFavoritePage ? Icons.delete : Icons.favorite_border,
-          color: isFavoritePage ? Colors.redAccent : Colors.white,
+          ctrl.isFavorited ? Icons.favorite : Icons.favorite_border,
+          color: Colors.white,
         ),
       ),
     );

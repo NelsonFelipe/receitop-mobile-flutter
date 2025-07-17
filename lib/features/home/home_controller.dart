@@ -1,25 +1,29 @@
 // lib/features/home/home_controller.dart
 
 import 'package:flutter/foundation.dart';
-import 'models/cat_image.dart';
-import 'services/cat_service.dart';
+import '../recipes/models/recipe.dart';
+import '../recipes/recipe_repository.dart';
 
 class HomeController extends ChangeNotifier {
-  final _service = CatService();
+  final RecipeRepository _repository;
 
-  List<CatImage> _cats = [];
-  List<CatImage> get cats => List.unmodifiable(_cats);
+  HomeController({required RecipeRepository repository}) : _repository = repository;
+
+  List<Recipe> _recipes = [];
+  List<Recipe> get recipes => List.unmodifiable(_recipes);
 
   bool isLoading = false;
   String? error;
 
-  Future<void> loadCats() async {
+  Future<void> loadRecipes() async {
     isLoading = true;
     error = null;
     notifyListeners();
 
     try {
-      _cats = await _service.fetchCats(limit: 7);
+      // TODO: Substituir por um token real
+      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MWZjMzY0Yi1jYzliLTRmZjEtYmRiYy02NzRmYjJmYzI5MzUiLCJpYXQiOjE3NTI3NzQ1NDMsImV4cCI6MTc1MzM3OTM0M30.wqDD-S4Ek312uSXZOxQw_8OvK9kOOQhANYN83fuF1iY"; 
+      _recipes = await _repository.getRecipes(token: token);
     } catch (e) {
       error = e.toString();
     } finally {
@@ -27,16 +31,4 @@ class HomeController extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  // Opcional: ainda expõe nomes de categorias (ou remova se for usar só cats)
-  final List<String> _categories = [
-    'Pizza',
-    'Saladas',
-    'Pratos Principais',
-    'Sobremesas',
-    'Bebidas',
-    'Lanches',
-    'Massas',
-  ];
-  List<String> get categories => List.unmodifiable(_categories);
 }

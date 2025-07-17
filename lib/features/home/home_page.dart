@@ -1,11 +1,10 @@
 // lib/features/home/home_page.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-import '../recipes/details/recipe_details_page.dart';  // <-- import da página de detalhes
+import '../recipes/details/recipe_details_page.dart';
 import 'home_controller.dart';
-import 'widgets/category_card.dart';
+import 'widgets/recipe_card.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,9 +13,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ctrl = context.watch<HomeController>();
 
-    // dispara busca só uma vez
-    if (!ctrl.isLoading && ctrl.cats.isEmpty && ctrl.error == null) {
-      context.read<HomeController>().loadCats();
+    if (!ctrl.isLoading && ctrl.recipes.isEmpty && ctrl.error == null) {
+      context.read<HomeController>().loadRecipes();
     }
 
     return Scaffold(
@@ -25,7 +23,6 @@ class HomePage extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 8),
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: TextField(
@@ -42,9 +39,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-
             const SizedBox(height: 12),
-
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -54,7 +49,7 @@ class HomePage extends StatelessWidget {
                         ? Center(child: Text('Erro: ${ctrl.error}'))
                         : GridView.builder(
                             physics: const BouncingScrollPhysics(),
-                            itemCount: ctrl.cats.length,
+                            itemCount: ctrl.recipes.length,
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
@@ -63,24 +58,21 @@ class HomePage extends StatelessWidget {
                               childAspectRatio: 0.8,
                             ),
                             itemBuilder: (context, i) {
-                              final cat = ctrl.cats[i];
-                              final title = (i < ctrl.categories.length)
-                                  ? ctrl.categories[i]
-                                  : 'Categoria ${i + 1}';
-
-                              return CategoryCard(
-                                title: title,
-                                imageUrl: cat.url,
+                              final recipe = ctrl.recipes[i];
+                              return RecipeCard(
+                                title: recipe.name,
+                                imageUrl: recipe.imageUrl,
                                 onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => RecipeDetailsPage(
-                                      title: title,
-                                      imageUrl: cat.url,
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => RecipeDetailsPage(
+                                        recipeId: recipe.id,
+                                        title: recipe.name,
+                                        imageUrl: recipe.imageUrl ?? '',
+                                      ),
                                     ),
-                                  ),
-                                );
+                                  );
                                 },
                               );
                             },

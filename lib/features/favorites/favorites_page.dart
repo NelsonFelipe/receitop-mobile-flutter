@@ -5,18 +5,27 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../recipes/details/recipe_details_page.dart'; // importa a página de detalhes
 import 'favorites_controller.dart';
-import '../home/widgets/category_card.dart';
+import '../home/widgets/recipe_card.dart';
 
-class FavoritesPage extends StatelessWidget {
+class FavoritesPage extends StatefulWidget {
   const FavoritesPage({Key? key}) : super(key: key);
+
+  @override
+  _FavoritesPageState createState() => _FavoritesPageState();
+}
+
+class _FavoritesPageState extends State<FavoritesPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<FavoritesController>().loadFavorites();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final ctrl = context.watch<FavoritesController>();
-
-    if (!ctrl.isLoading && ctrl.favorites.isEmpty && ctrl.error == null) {
-      context.read<FavoritesController>().loadFavorites();
-    }
 
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
@@ -65,28 +74,17 @@ class FavoritesPage extends StatelessWidget {
                             ),
                             itemBuilder: (context, i) {
                               final fav = ctrl.favorites[i];
-                              final title = (i < ctrl.titles.length)
-                                  ? ctrl.titles[i]
-                                  : 'Receita ${i + 1}';
-
-                              return CategoryCard(
-                                title: title,
-                                imageUrl: fav.url,
+                              return RecipeCard(
+                                title: fav.name,
+                                imageUrl: fav.imageUrl,
                                 onTap: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (_) => RecipeDetailsPage(
-                                        title: title,
-                                        imageUrl: fav.url,
-                                        isFavoritePage: true,
-                                        onFavoriteToggle: () {
-                                          // remove dos favoritos
-                                          context
-                                              .read<FavoritesController>()
-                                              .removeFavorite(fav);
-                                          Navigator.pop(context);
-                                        },
+                                      builder: (context) => RecipeDetailsPage(
+                                        recipeId: fav.id,
+                                        title: fav.name,
+                                        imageUrl: fav.imageUrl ?? '',
                                       ),
                                     ),
                                   );
