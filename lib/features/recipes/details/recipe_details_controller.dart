@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'recipe_details_model.dart';
 
 class RecipeDetailsController extends ChangeNotifier {
@@ -92,7 +94,7 @@ class RecipeDetailsController extends ChangeNotifier {
       http.Response response;
       if (_isFavorited) {
         response = await http.delete(
-          Uri.parse('$baseUrl/recipe/$recipeId/favorite'),
+          Uri.parse('$baseUrl/recipe/$recipeId/unfavorite'),
           headers: {
             'Authorization': 'Bearer $token',
           },
@@ -106,8 +108,19 @@ class RecipeDetailsController extends ChangeNotifier {
         );
       }
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 204) {
         _isFavorited = !_isFavorited;
+        if (!_isFavorited) {
+          Fluttertoast.showToast(
+            msg: "Receita removida dos favoritos!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+        }
       } else {
         error = 'Falha ao alternar favorito.';
       }

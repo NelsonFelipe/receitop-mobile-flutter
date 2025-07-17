@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../recipes/details/recipe_details_page.dart'; // importa a página de detalhes
+import '../recipes/details/recipe_details_page.dart'; 
 import 'favorites_controller.dart';
 import '../home/widgets/recipe_card.dart';
 
@@ -32,7 +32,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
       body: SafeArea(
         child: Column(
           children: [
-            // Search bar
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
               child: TextField(
@@ -54,7 +53,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
             const SizedBox(height: 8),
 
-            // Grid de favoritos
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -85,6 +83,10 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                         recipeId: fav.id,
                                         title: fav.name,
                                         imageUrl: fav.imageUrl ?? '',
+                                        isFavoritePage: true,
+                                        onFavoriteToggle: () {
+                                          context.read<FavoritesController>().loadFavorites();
+                                        },
                                       ),
                                     ),
                                   );

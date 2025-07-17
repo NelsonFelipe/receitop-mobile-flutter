@@ -65,7 +65,7 @@ class FavoritesController extends ChangeNotifier {
         },
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 204) {
         _favorites.removeWhere((fav) => fav.id == recipeId);
       } else {
         error = 'Falha ao remover favorito: ${response.statusCode}';

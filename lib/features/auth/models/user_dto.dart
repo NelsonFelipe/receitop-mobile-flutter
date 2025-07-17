@@ -4,7 +4,7 @@ class UserDTO {
   final String name;
   final String email;
   final String password;
-  final String? token;  // para guardar JWT na resposta de login
+  final String? token;  
 
   UserDTO({ this.id, required this.name, required this.email, required this.password, this.token });
 

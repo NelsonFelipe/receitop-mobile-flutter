@@ -7,8 +7,6 @@ class AuthService {
 
   AuthService({ required this.baseUrl });
 
-  /// Faz o registro de um novo usuário.
-  /// Retorna true em caso de 201 Created, false em qualquer outro status.
   Future<bool> register(UserDTO user) async {
     final uri = Uri.parse('$baseUrl/users');
     final response = await http.post(

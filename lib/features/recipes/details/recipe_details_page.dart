@@ -162,7 +162,12 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
                   ],
                 ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => ctrl.toggleFavorite(widget.recipeId),
+        onPressed: () async {
+          await ctrl.toggleFavorite(widget.recipeId);
+          if (widget.isFavoritePage && !ctrl.isFavorited) {
+            widget.onFavoriteToggle?.call();
+          }
+        },
         backgroundColor: Colors.redAccent,
         child: Icon(
           ctrl.isFavorited ? Icons.favorite : Icons.favorite_border,

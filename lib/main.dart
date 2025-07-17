@@ -15,7 +15,7 @@ import 'features/recipes/create/recipe_create_page.dart';
 import 'features/recipes/details/recipe_details_controller.dart';
 import 'features/recipes/recipe_repository.dart';
 
-// Outros Controllers (usados dentro do AppShell)
+//  Controllers 
 import 'features/home/home_controller.dart';
 import 'features/profile/profile_controller.dart';
 import 'features/favorites/favorites_controller.dart';
@@ -56,8 +56,6 @@ class MyApp extends StatelessWidget {
           seedColor: const Color.fromARGB(255, 11, 170, 8),
         ),
       ),
-
-      // Tela inicial: registro
       initialRoute: '/login',
       routes: {
         '/register': (context) => const RegisterPage(),

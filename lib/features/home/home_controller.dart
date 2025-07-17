@@ -21,7 +21,6 @@ class HomeController extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // TODO: Substituir por um token real
       const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MWZjMzY0Yi1jYzliLTRmZjEtYmRiYy02NzRmYjJmYzI5MzUiLCJpYXQiOjE3NTI3NzQ1NDMsImV4cCI6MTc1MzM3OTM0M30.wqDD-S4Ek312uSXZOxQw_8OvK9kOOQhANYN83fuF1iY"; 
       _recipes = await _repository.getRecipes(token: token);
     } catch (e) {

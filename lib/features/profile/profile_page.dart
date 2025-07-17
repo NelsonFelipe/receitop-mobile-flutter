@@ -7,20 +7,32 @@ import 'profile_controller.dart';
 import 'widgets/profile_avatar.dart';
 import 'widgets/profile_stat_card.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ProfileController>().loadProfile();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final ctrl = context.watch<ProfileController>();
 
-    // Carrega perfil ao abrir
-    if (ctrl.name.isEmpty) {
-      context.read<ProfileController>().loadProfile();
-    }
-
     return Scaffold(
-      body: Column(
+      body: ctrl.isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : ctrl.error != null
+              ? Center(child: Text('Erro: ${ctrl.error}'))
+              : Column(
         children: [
           // ─── Header com gradiente ─────────────────────────
           Container(
@@ -41,16 +53,15 @@ class ProfilePage extends StatelessWidget {
                 Positioned(
                   bottom: -48,
                   child: ProfileAvatar(
-                    imageUrl: 'https://i.pinimg.com/736x/6e/64/82/6e64827f0b16635cc489720d5216ab66.jpg',
+                    imageUrl: 'assets/images/profile_pic.png',
                   ),
                 ),
               ],
             ),
           ),
 
-          const SizedBox(height: 56), // espaço para o avatar sobreposto
+          const SizedBox(height: 56), 
 
-          // ─── Nome e e‑mail ────────────────────────────────
           Text(
             ctrl.name,
             style: GoogleFonts.inter(
@@ -69,7 +80,6 @@ class ProfilePage extends StatelessWidget {
 
           const SizedBox(height: 24),
 
-          // ─── Estatísticas ─────────────────────────────────
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
@@ -82,7 +92,6 @@ class ProfilePage extends StatelessWidget {
 
           const SizedBox(height: 32),
 
-          // ─── Ações do usuário ─────────────────────────────
           Expanded(
             child: ListView(
               children: [

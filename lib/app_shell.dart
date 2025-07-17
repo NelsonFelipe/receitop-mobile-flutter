@@ -83,7 +83,6 @@ class _AppShellState extends State<AppShell> {
         ],
       ),
 
-      // Posiciona o botão no canto inferior direito, flutuando acima da tab bar
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(right: 1, bottom:1),
