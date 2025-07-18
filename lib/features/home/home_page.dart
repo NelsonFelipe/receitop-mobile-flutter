@@ -37,7 +37,6 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 8),
             SearchBarWidget(
               controller: _searchController,
               hintText: 'Buscar receitas...',

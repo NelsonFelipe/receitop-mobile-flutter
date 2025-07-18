@@ -64,4 +64,15 @@ class ProfileController extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('auth_token');
+    // Optionally, reset other profile data if needed
+    name = 'Nome do Usuário';
+    email = 'usuario@exemplo.com';
+    favoritesCount = 0;
+    followingCount = 0;
+    notifyListeners();
+  }
 }

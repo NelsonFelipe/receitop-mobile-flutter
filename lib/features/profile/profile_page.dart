@@ -7,6 +7,7 @@ import 'profile_controller.dart';
 import 'widgets/profile_avatar.dart';
 import 'widgets/profile_stat_card.dart';
 
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
@@ -36,7 +37,7 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           // ─── Header com gradiente ─────────────────────────
           Container(
-            height: 200,
+            height: 270,
             width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -49,11 +50,53 @@ class _ProfilePageState extends State<ProfilePage> {
               clipBehavior: Clip.none,
               alignment: Alignment.center,
               children: [
-                // Avatar
                 Positioned(
                   bottom: -48,
                   child: ProfileAvatar(
                     imageUrl: 'assets/images/profile_pic.png',
+                  ),
+                ),
+                Positioned(
+                  top: 220,
+                  right: 16,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () async {
+                        await ctrl.logout();
+                        Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+                      },
+                      borderRadius: BorderRadius.circular(25), // Half of width/height for circular ripple
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 6,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.logout, color: Colors.white, size: 20),
+                            Text(
+                              'Sair',
+                              style: GoogleFonts.inter(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 9,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -95,11 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Expanded(
             child: ListView(
               children: [
-                ListTile(
-                  leading: const Icon(Icons.logout),
-                  title: Text('Sair', style: GoogleFonts.inter()),
-                  onTap: () {/* TODO */},
-                ),
+                
               ],
             ),
           ),

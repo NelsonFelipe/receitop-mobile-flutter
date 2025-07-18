@@ -50,7 +50,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
               },
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
 
             Expanded(
               child: Padding(

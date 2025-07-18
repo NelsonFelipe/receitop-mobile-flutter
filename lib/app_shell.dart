@@ -31,54 +31,69 @@ class _AppShellState extends State<AppShell> {
 
     return Scaffold(
       body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.white,
-        showUnselectedLabels: true,
-        selectedFontSize: 12,
-        unselectedFontSize: 12,
-        selectedLabelStyle: GoogleFonts.inter(fontWeight: FontWeight.w600),
-        unselectedLabelStyle: GoogleFonts.inter(fontWeight: FontWeight.w400),
-        selectedItemColor: greenStart,
-        unselectedItemColor: Colors.grey.shade600,
-        items: [
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.home_outlined),
-            activeIcon: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: greenStart.withOpacity(0.15),
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            height: 4.0, // Height of the gradient "border"
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [greenStart, greenEnd],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
-              child: Icon(Icons.home, color: greenStart),
             ),
-            label: 'Início',
           ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.favorite_border),
-            activeIcon: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: greenStart.withOpacity(0.15),
+          BottomNavigationBar(
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Colors.white,
+            showUnselectedLabels: true,
+            selectedFontSize: 12,
+            unselectedFontSize: 12,
+            selectedLabelStyle: GoogleFonts.inter(fontWeight: FontWeight.w600),
+            unselectedLabelStyle: GoogleFonts.inter(fontWeight: FontWeight.w400),
+            selectedItemColor: greenStart,
+            unselectedItemColor: Colors.grey.shade600,
+            items: [
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.home_outlined),
+                activeIcon: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: greenStart.withOpacity(0.15),
+                  ),
+                  child: Icon(Icons.home, color: greenStart),
+                ),
+                label: 'Início',
               ),
-              child: Icon(Icons.favorite, color: greenStart),
-            ),
-            label: 'Favoritos',
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.person_outline),
-            activeIcon: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: greenStart.withOpacity(0.15),
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.favorite_border),
+                activeIcon: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: greenStart.withOpacity(0.15),
+                  ),
+                  child: Icon(Icons.favorite, color: greenStart),
+                ),
+                label: 'Favoritos',
               ),
-              child: Icon(Icons.person, color: greenStart),
-            ),
-            label: 'Perfil',
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.person_outline),
+                activeIcon: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: greenStart.withOpacity(0.15),
+                  ),
+                  child: Icon(Icons.person, color: greenStart),
+                ),
+                label: 'Perfil',
+              ),
+            ],
           ),
         ],
       ),
