@@ -9,7 +9,7 @@ class ProfileController extends ChangeNotifier {
 
   String name = 'Nome do Usuário';
   String email = 'usuario@exemplo.com';
-  int recipesCount = 0;
+  
   int favoritesCount = 0;
   int followingCount = 0;
 

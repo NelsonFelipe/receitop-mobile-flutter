@@ -84,7 +84,7 @@ class _ProfilePageState extends State<ProfilePage> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
-                ProfileStatCard(label: 'Receitas', value: ctrl.recipesCount),
+                
                 ProfileStatCard(label: 'Favoritas', value: ctrl.favoritesCount),
               ],
             ),

@@ -83,33 +83,7 @@ class _AppShellState extends State<AppShell> {
         ],
       ),
 
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(right: 1, bottom:1),
-        child: Container(
-          width: 56,
-          height: 56,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [greenStart, greenEnd],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 6,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: IconButton(
-            icon: const Icon(Icons.add, size: 28, color: Colors.white),
-            onPressed: () => Navigator.pushNamed(context, '/create'),
-          ),
-        ),
-      ),
+      
     );
   }
 }

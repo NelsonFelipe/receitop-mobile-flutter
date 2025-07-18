@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../common/widgets/search_bar_widget.dart';
+
 import '../recipes/details/recipe_details_page.dart'; 
 import 'favorites_controller.dart';
 import '../home/widgets/recipe_card.dart';
@@ -15,6 +17,14 @@ class FavoritesPage extends StatefulWidget {
 }
 
 class _FavoritesPageState extends State<FavoritesPage> {
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -32,23 +42,12 @@ class _FavoritesPageState extends State<FavoritesPage> {
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Buscar favoritos...',
-                  hintStyle: GoogleFonts.inter(color: Colors.grey.shade600),
-                  prefixIcon: const Icon(Icons.search),
-                  filled: true,
-                  fillColor: Colors.white,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-                onChanged: (term) {},
-              ),
+            SearchBarWidget(
+              controller: _searchController,
+              hintText: 'Buscar favoritos...',
+              onChanged: (query) {
+                ctrl.filterFavorites(query);
+              },
             ),
 
             const SizedBox(height: 8),

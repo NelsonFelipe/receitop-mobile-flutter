@@ -2,12 +2,27 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/widgets/search_bar_widget.dart';
+
 import '../recipes/details/recipe_details_page.dart';
 import 'home_controller.dart';
 import 'widgets/recipe_card.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,21 +38,12 @@ class HomePage extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Buscar receitas...',
-                  prefixIcon: const Icon(Icons.search),
-                  filled: true,
-                  fillColor: Colors.white,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
+            SearchBarWidget(
+              controller: _searchController,
+              hintText: 'Buscar receitas...',
+              onChanged: (query) {
+                ctrl.filterRecipes(query);
+              },
             ),
             const SizedBox(height: 12),
             Expanded(

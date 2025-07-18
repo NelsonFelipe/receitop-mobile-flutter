@@ -8,7 +8,9 @@ class FavoritesController extends ChangeNotifier {
   final String baseUrl = 'http://10.0.2.2:3333';
 
   List<RecipeDetails> _favorites = [];
-  List<RecipeDetails> get favorites => List.unmodifiable(_favorites);
+  List<RecipeDetails> _filteredFavorites = [];
+
+  List<RecipeDetails> get favorites => List.unmodifiable(_filteredFavorites);
 
   bool isLoading = false;
   String? error;
@@ -36,6 +38,7 @@ class FavoritesController extends ChangeNotifier {
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
         _favorites = data.map((json) => RecipeDetails.fromJson(json)).toList();
+        _filteredFavorites = List.from(_favorites); // Initialize filtered favorites
       } else {
         throw Exception('Falha ao carregar receitas favoritas: ${response.statusCode}');
       }
@@ -45,6 +48,18 @@ class FavoritesController extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
+  }
+
+  void filterFavorites(String query) {
+    if (query.isEmpty) {
+      _filteredFavorites = List.from(_favorites);
+    } else {
+      _filteredFavorites = _favorites
+          .where((favorite) =>
+              favorite.name.toLowerCase().startsWith(query.toLowerCase()))
+          .toList();
+    }
+    notifyListeners();
   }
 
   Future<void> removeFavorite(String recipeId) async {
