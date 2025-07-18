@@ -1,4 +1,3 @@
-// lib/features/auth/models/user_dto.dart
 class UserDTO {
   final String? id;
   final String name;

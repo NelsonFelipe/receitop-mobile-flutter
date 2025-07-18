@@ -1,4 +1,3 @@
-// lib/features/profile/profile_page.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,14 +6,12 @@ import 'profile_controller.dart';
 import 'widgets/profile_avatar.dart';
 import 'widgets/profile_stat_card.dart';
 
-
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
-
 class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
@@ -23,7 +20,6 @@ class _ProfilePageState extends State<ProfilePage> {
       context.read<ProfileController>().loadProfile();
     });
   }
-
   @override
   Widget build(BuildContext context) {
     final ctrl = context.watch<ProfileController>();
@@ -35,7 +31,6 @@ class _ProfilePageState extends State<ProfilePage> {
               ? Center(child: Text('Erro: ${ctrl.error}'))
               : Column(
         children: [
-          // ─── Header com gradiente ─────────────────────────
           Container(
             height: 270,
             width: double.infinity,
@@ -66,7 +61,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         await ctrl.logout();
                         Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
                       },
-                      borderRadius: BorderRadius.circular(25), // Half of width/height for circular ripple
+                      borderRadius: BorderRadius.circular(25),
                       child: Container(
                         width: 50,
                         height: 50,
@@ -102,9 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
-
           const SizedBox(height: 56), 
-
           Text(
             ctrl.name,
             style: GoogleFonts.inter(
@@ -120,21 +113,16 @@ class _ProfilePageState extends State<ProfilePage> {
               color: Colors.grey.shade600,
             ),
           ),
-
           const SizedBox(height: 24),
-
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
-              children: [
-                
+              children: [             
                 ProfileStatCard(label: 'Favoritas', value: ctrl.favoritesCount),
               ],
             ),
           ),
-
           const SizedBox(height: 32),
-
           Expanded(
             child: ListView(
               children: [

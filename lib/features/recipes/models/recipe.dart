@@ -1,6 +1,3 @@
-
-// lib/features/recipes/models/recipe.dart
-
 class Recipe {
   final String id;
   final String name;

@@ -1,4 +1,3 @@
-// lib/features/recipes/create/recipe_create_page.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -68,7 +67,7 @@ class RecipeCreatePage extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Receita criada com sucesso!')),
                   );
-                  Navigator.pushReplacementNamed(context, '/app'); // Redireciona para a tela principal
+                  Navigator.pushReplacementNamed(context, '/app');
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Erro ao criar receita: ${e.toString()}')),

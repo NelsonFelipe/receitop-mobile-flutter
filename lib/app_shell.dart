@@ -1,4 +1,3 @@
-// lib/app_shell.dart
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -96,9 +95,7 @@ class _AppShellState extends State<AppShell> {
             ],
           ),
         ],
-      ),
-
-      
+      ), 
     );
   }
 }

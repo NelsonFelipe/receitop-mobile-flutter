@@ -29,11 +29,11 @@ class SearchBarWidget extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(12),
         ),
-        padding: const EdgeInsets.all(2), // Espessura da borda
+        padding: const EdgeInsets.all(2), 
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(10), // Raio ligeiramente menor para o container interno
+            borderRadius: BorderRadius.circular(10), 
           ),
           child: TextField(
             controller: controller,
@@ -44,14 +44,14 @@ class SearchBarWidget extends StatelessWidget {
               prefixIcon: const Icon(Icons.search),
               contentPadding: const EdgeInsets.symmetric(vertical: 14),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10), // Corresponder ao raio do container interno
-                borderSide: BorderSide.none, // Sem borda para o TextField em si
+                borderRadius: BorderRadius.circular(10), 
+                borderSide: BorderSide.none,
               ),
-              enabledBorder: OutlineInputBorder( // Remover borda habilitada
+              enabledBorder: OutlineInputBorder( 
                 borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide.none,
               ),
-              focusedBorder: OutlineInputBorder( // Remover borda focada
+              focusedBorder: OutlineInputBorder( 
                 borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide.none,
               ),

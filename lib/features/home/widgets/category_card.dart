@@ -1,4 +1,3 @@
-// lib/features/home/widgets/category_card.dart
 import 'package:flutter/material.dart';
 
 class CategoryCard extends StatelessWidget {

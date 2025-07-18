@@ -1,4 +1,3 @@
-// lib/features/auth/register/widgets/submit_button.dart
 import 'package:flutter/material.dart';
 
 class SubmitButton extends StatelessWidget {

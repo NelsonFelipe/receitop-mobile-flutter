@@ -1,4 +1,3 @@
-// lib/features/profile/profile_controller.dart
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -68,7 +67,6 @@ class ProfileController extends ChangeNotifier {
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');
-    // Optionally, reset other profile data if needed
     name = 'Nome do Usuário';
     email = 'usuario@exemplo.com';
     favoritesCount = 0;

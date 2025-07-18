@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'register_controller.dart';
-import 'widgets/input_field.dart';
-import '../../../common/widgets/gradient_button.dart';
+
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -213,7 +212,6 @@ class RegisterPage extends StatelessWidget {
   }
 }
 
-// Widget personalizado para campos de entrada modernos (sem card)
 class _ModernInputField extends StatefulWidget {
   final String label;
   final IconData icon;
@@ -305,7 +303,6 @@ class _ModernInputFieldState extends State<_ModernInputField> {
   }
 }
 
-// Widget personalizado para botão moderno
 class _ModernButton extends StatelessWidget {
   final String label;
   final bool enabled;
