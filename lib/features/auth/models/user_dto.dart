@@ -1,10 +1,9 @@
-// lib/features/auth/models/user_dto.dart
 class UserDTO {
   final String? id;
   final String name;
   final String email;
   final String password;
-  final String? token;  // para guardar JWT na resposta de login
+  final String? token;  
 
   UserDTO({ this.id, required this.name, required this.email, required this.password, this.token });
 
@@ -21,4 +20,14 @@ class UserDTO {
     'email': email,
     'password': password,
   };
+}
+
+class LoginResponse {
+  final String token;
+
+  LoginResponse({required this.token});
+
+  factory LoginResponse.fromJson(Map<String, dynamic> json) {
+    return LoginResponse(token: json['token']);
+  }
 }

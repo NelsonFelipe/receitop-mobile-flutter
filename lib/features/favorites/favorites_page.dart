@@ -1,51 +1,55 @@
-// lib/features/favorites/favorites_page.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-import '../recipes/details/recipe_details_page.dart'; // importa a página de detalhes
+import '../../common/widgets/search_bar_widget.dart';
+
+import '../recipes/details/recipe_details_page.dart'; 
 import 'favorites_controller.dart';
-import '../home/widgets/category_card.dart';
+import '../home/widgets/recipe_card.dart';
 
-class FavoritesPage extends StatelessWidget {
+class FavoritesPage extends StatefulWidget {
   const FavoritesPage({Key? key}) : super(key: key);
+
+  @override
+  _FavoritesPageState createState() => _FavoritesPageState();
+}
+
+class _FavoritesPageState extends State<FavoritesPage> {
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<FavoritesController>().loadFavorites();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final ctrl = context.watch<FavoritesController>();
-
-    if (!ctrl.isLoading && ctrl.favorites.isEmpty && ctrl.error == null) {
-      context.read<FavoritesController>().loadFavorites();
-    }
 
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       body: SafeArea(
         child: Column(
           children: [
-            // Search bar
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Buscar favoritos...',
-                  hintStyle: GoogleFonts.inter(color: Colors.grey.shade600),
-                  prefixIcon: const Icon(Icons.search),
-                  filled: true,
-                  fillColor: Colors.white,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-                onChanged: (term) {},
-              ),
+            SearchBarWidget(
+              controller: _searchController,
+              hintText: 'Buscar favoritos...',
+              onChanged: (query) {
+                ctrl.filterFavorites(query);
+              },
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
 
-            // Grid de favoritos
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -65,27 +69,20 @@ class FavoritesPage extends StatelessWidget {
                             ),
                             itemBuilder: (context, i) {
                               final fav = ctrl.favorites[i];
-                              final title = (i < ctrl.titles.length)
-                                  ? ctrl.titles[i]
-                                  : 'Receita ${i + 1}';
-
-                              return CategoryCard(
-                                title: title,
-                                imageUrl: fav.url,
+                              return RecipeCard(
+                                title: fav.name,
+                                imageUrl: fav.imageUrl,
                                 onTap: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (_) => RecipeDetailsPage(
-                                        title: title,
-                                        imageUrl: fav.url,
+                                      builder: (context) => RecipeDetailsPage(
+                                        recipeId: fav.id,
+                                        title: fav.name,
+                                        imageUrl: fav.imageUrl ?? '',
                                         isFavoritePage: true,
                                         onFavoriteToggle: () {
-                                          // remove dos favoritos
-                                          context
-                                              .read<FavoritesController>()
-                                              .removeFavorite(fav);
-                                          Navigator.pop(context);
+                                          context.read<FavoritesController>().loadFavorites();
                                         },
                                       ),
                                     ),

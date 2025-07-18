@@ -1,5 +1,3 @@
-// lib/features/auth/register/register_controller.dart
-import 'package:flutter/foundation.dart';
 import '../models/user_dto.dart';
 import '../services/auth_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -61,6 +59,7 @@ class RegisterController extends ChangeNotifier {
 
     try {
       final success = await authService.register(user);
+      print('🟢 Resposta da api: ${success}');
       if (!success) {
         errorMessage = 'Falha ao registrar. Tente novamente.';
       }
@@ -74,9 +73,6 @@ class RegisterController extends ChangeNotifier {
         fontSize: 16.0,
       );
 
-
-      // Se sucesso, faça aqui o que for necessário:
-      // ex: navegação para outra tela ou limpeza de campos
     } catch (e) {
       errorMessage = 'Erro de conexão: ${e.toString()}';
     } finally {

@@ -1,29 +1,16 @@
-// lib/features/favorites/favorites_controller.dart
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import '../home/models/cat_image.dart';
-import '../home/services/cat_service.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import '../recipes/details/recipe_details_model.dart';
 
 class FavoritesController extends ChangeNotifier {
-  final _service = CatService();
+  final String baseUrl = 'http://10.0.2.2:3333';
 
-  // 1) Sua lista de títulos paralela
-  final List<String> _titles = [
-    'Pizza',
-    'Saladas',
-    'Bolo de Chocolate',
-    'Sobremesas',
-    'Bebidas',
-    'Lanches',
-    'Massas',
-    'Vegetariano',
-    'Vegano',
-    'Doces'
-  ];
-  List<String> get titles => List.unmodifiable(_titles);
+  List<RecipeDetails> _favorites = [];
+  List<RecipeDetails> _filteredFavorites = [];
 
-  // 2) Lista de imagens (objetos CatImage)
-  List<CatImage> _favorites = [];
-  List<CatImage> get favorites => List.unmodifiable(_favorites);
+  List<RecipeDetails> get favorites => List.unmodifiable(_filteredFavorites);
 
   bool isLoading = false;
   String? error;
@@ -34,7 +21,27 @@ class FavoritesController extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _favorites = await _service.fetchCats(limit: 14);
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('auth_token');
+
+      if (token == null) {
+        throw Exception('Token de autenticação não encontrado.');
+      }
+
+      final response = await http.get(
+        Uri.parse('$baseUrl/favorite-recipe'),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        _favorites = data.map((json) => RecipeDetails.fromJson(json)).toList();
+        _filteredFavorites = List.from(_favorites); // Initialize filtered favorites
+      } else {
+        throw Exception('Falha ao carregar receitas favoritas: ${response.statusCode}');
+      }
     } catch (e) {
       error = e.toString();
     } finally {
@@ -43,10 +50,45 @@ class FavoritesController extends ChangeNotifier {
     }
   }
 
-  /// Remove uma imagem dos favoritos e atualiza a UI
-  Future<void> removeFavorite(CatImage fav) async {
-    // Remove usando igualdade de instância ou URL como identificador
-    _favorites.removeWhere((f) => f.url == fav.url);
+  void filterFavorites(String query) {
+    if (query.isEmpty) {
+      _filteredFavorites = List.from(_favorites);
+    } else {
+      _filteredFavorites = _favorites
+          .where((favorite) =>
+              favorite.name.toLowerCase().startsWith(query.toLowerCase()))
+          .toList();
+    }
     notifyListeners();
+  }
+
+  Future<void> removeFavorite(String recipeId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('auth_token');
+
+    if (token == null) {
+      error = 'Token de autenticação não encontrado.';
+      notifyListeners();
+      return;
+    }
+
+    try {
+      final response = await http.delete(
+        Uri.parse('$baseUrl/recipe/$recipeId/favorite'),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        _favorites.removeWhere((fav) => fav.id == recipeId);
+      } else {
+        error = 'Falha ao remover favorito: ${response.statusCode}';
+      }
+    } catch (e) {
+      error = e.toString();
+    } finally {
+      notifyListeners();
+    }
   }
 }

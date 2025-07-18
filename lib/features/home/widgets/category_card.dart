@@ -1,10 +1,9 @@
-// lib/features/home/widgets/category_card.dart
 import 'package:flutter/material.dart';
 
 class CategoryCard extends StatelessWidget {
   final String title;
   final String imageUrl;
-  final VoidCallback? onTap;  // Callback opcional para tratar o toque
+  final VoidCallback? onTap; 
 
   const CategoryCard({
     Key? key,
@@ -20,7 +19,7 @@ class CategoryCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: onTap,  // Dispara a ação passada de fora
+        onTap: onTap,
         child: Stack(
           children: [
             // imagem
@@ -28,7 +27,6 @@ class CategoryCard extends StatelessWidget {
               child: Image.network(imageUrl, fit: BoxFit.cover),
             ),
 
-            // degradê
             Positioned.fill(
               child: DecoratedBox(
                 decoration: BoxDecoration(
@@ -44,7 +42,6 @@ class CategoryCard extends StatelessWidget {
               ),
             ),
 
-            // título
             Positioned(
               left: 12,
               bottom: 12,

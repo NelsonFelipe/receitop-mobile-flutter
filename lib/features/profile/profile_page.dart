@@ -1,4 +1,3 @@
-// lib/features/profile/profile_page.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,24 +6,33 @@ import 'profile_controller.dart';
 import 'widgets/profile_avatar.dart';
 import 'widgets/profile_stat_card.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+class _ProfilePageState extends State<ProfilePage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ProfileController>().loadProfile();
+    });
+  }
   @override
   Widget build(BuildContext context) {
     final ctrl = context.watch<ProfileController>();
 
-    // Carrega perfil ao abrir
-    if (ctrl.name.isEmpty) {
-      context.read<ProfileController>().loadProfile();
-    }
-
     return Scaffold(
-      body: Column(
+      body: ctrl.isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : ctrl.error != null
+              ? Center(child: Text('Erro: ${ctrl.error}'))
+              : Column(
         children: [
-          // ─── Header com gradiente ─────────────────────────
           Container(
-            height: 200,
+            height: 270,
             width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -37,20 +45,59 @@ class ProfilePage extends StatelessWidget {
               clipBehavior: Clip.none,
               alignment: Alignment.center,
               children: [
-                // Avatar
                 Positioned(
                   bottom: -48,
                   child: ProfileAvatar(
-                    imageUrl: 'https://i.pinimg.com/736x/6e/64/82/6e64827f0b16635cc489720d5216ab66.jpg',
+                    imageUrl: 'assets/images/profile_pic.png',
+                  ),
+                ),
+                Positioned(
+                  top: 220,
+                  right: 16,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () async {
+                        await ctrl.logout();
+                        Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+                      },
+                      borderRadius: BorderRadius.circular(25),
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 6,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.logout, color: Colors.white, size: 20),
+                            Text(
+                              'Sair',
+                              style: GoogleFonts.inter(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 9,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-
-          const SizedBox(height: 56), // espaço para o avatar sobreposto
-
-          // ─── Nome e e‑mail ────────────────────────────────
+          const SizedBox(height: 56), 
           Text(
             ctrl.name,
             style: GoogleFonts.inter(
@@ -66,43 +113,20 @@ class ProfilePage extends StatelessWidget {
               color: Colors.grey.shade600,
             ),
           ),
-
           const SizedBox(height: 24),
-
-          // ─── Estatísticas ─────────────────────────────────
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
-              children: [
-                ProfileStatCard(label: 'Receitas', value: ctrl.recipesCount),
+              children: [             
                 ProfileStatCard(label: 'Favoritas', value: ctrl.favoritesCount),
               ],
             ),
           ),
-
           const SizedBox(height: 32),
-
-          // ─── Ações do usuário ─────────────────────────────
           Expanded(
             child: ListView(
               children: [
-                ListTile(
-                  leading: const Icon(Icons.edit),
-                  title: Text('Editar Perfil', style: GoogleFonts.inter()),
-                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                  onTap: () {/* TODO */},
-                ),
-                ListTile(
-                  leading: const Icon(Icons.settings),
-                  title: Text('Configurações', style: GoogleFonts.inter()),
-                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                  onTap: () {/* TODO */},
-                ),
-                ListTile(
-                  leading: const Icon(Icons.logout),
-                  title: Text('Sair', style: GoogleFonts.inter()),
-                  onTap: () {/* TODO */},
-                ),
+                
               ],
             ),
           ),

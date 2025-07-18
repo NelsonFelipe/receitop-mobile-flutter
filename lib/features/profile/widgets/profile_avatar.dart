@@ -1,4 +1,3 @@
-// lib/features/profile/widgets/profile_avatar.dart
 import 'package:flutter/material.dart';
 
 class ProfileAvatar extends StatelessWidget {
@@ -18,7 +17,9 @@ class ProfileAvatar extends StatelessWidget {
       backgroundColor: Colors.white,
       child: CircleAvatar(
         radius: radius,
-        backgroundImage: NetworkImage(imageUrl),
+        backgroundImage: imageUrl.startsWith('http')
+            ? NetworkImage(imageUrl)
+            : AssetImage(imageUrl) as ImageProvider,
         backgroundColor: Colors.grey.shade200,
       ),
     );

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'login_controller.dart';
-import '../register/widgets/input_field.dart';
-import '../../../common/widgets/gradient_button.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -20,7 +18,6 @@ class LoginPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Card principal com glassmorphism effect
                   Container(
                     padding: const EdgeInsets.all(32),
                     decoration: BoxDecoration(
@@ -28,7 +25,6 @@ class LoginPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        // Logo com animação sutil
                         Hero(
                           tag: 'logo',
                           child: Container(
@@ -41,7 +37,6 @@ class LoginPage extends StatelessWidget {
                           ),
                         ),
                         
-                        // Título de boas-vindas
                         const Text(
                           'Bem-vindo de volta!',
                           style: TextStyle(
@@ -65,7 +60,6 @@ class LoginPage extends StatelessWidget {
                         
                         const SizedBox(height: 40),
                         
-                        // Campo de email modernizado
                         _ModernInputField(
                           label: 'E-mail',
                           icon: Icons.email_outlined,
@@ -75,7 +69,6 @@ class LoginPage extends StatelessWidget {
                         
                         const SizedBox(height: 20),
                         
-                        // Campo de senha modernizado
                         _ModernInputField(
                           label: 'Senha',
                           icon: Icons.lock_outline,
@@ -87,33 +80,26 @@ class LoginPage extends StatelessWidget {
                         
                         const SizedBox(height: 32),
                         
-                        // Botão de login modernizado
                         _ModernButton(
                           label: 'Entrar',
                           enabled: ctrl.canSubmit,
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (_) => AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                title: const Text('Bem-vindo!'),
-                                content: Text('Você entrou como ${ctrl.email}'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('OK'),
-                                  )
-                                ],
-                              ),
-                            );
+                          onPressed: () async {
+                            final success = await ctrl.login();
+                            if (success) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Login bem-sucedido!')),
+                              );
+                              Navigator.pushReplacementNamed(context, '/app');
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Email ou senha inválidos.')),
+                              );
+                            }
                           },
                         ),
                         
                         const SizedBox(height: 24),
                         
-                        // Divisor "ou"
                         Row(
                           children: [
                             Expanded(child: Divider(color: Colors.grey[300])),
@@ -133,7 +119,6 @@ class LoginPage extends StatelessWidget {
                         
                         const SizedBox(height: 24),
                         
-                        // Link para registro
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -171,8 +156,6 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
-
-// Widget personalizado para campos de entrada modernos
 class _ModernInputField extends StatefulWidget {
   final String label;
   final IconData icon;
@@ -256,7 +239,6 @@ class _ModernInputFieldState extends State<_ModernInputField> {
   }
 }
 
-// Widget personalizado para botão moderno
 class _ModernButton extends StatelessWidget {
   final String label;
   final bool enabled;
